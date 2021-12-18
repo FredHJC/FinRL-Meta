@@ -7,6 +7,7 @@ from elegantrl.agents.AgentTD3 import AgentTD3
 from elegantrl.agents.AgentA2C import AgentA2C
 from elegantrl.train.config import Arguments
 from elegantrl.train.run_tutorial import train_and_evaluate
+import numpy as np
 
 MODELS = {"ddpg": AgentDDPG, "td3": AgentTD3, "sac": AgentSAC, "ppo": AgentPPO, "a2c": AgentA2C}
 OFF_POLICY_MODELS = ["ddpg", "td3", "sac"]
@@ -41,7 +42,7 @@ class DRLEnsembleAgent:
         self.price_array = price_array
         self.tech_array = tech_array
         self.turbulence_array = turbulence_array
-        
+
     def get_model(self, model_name, model_kwargs):
         env_config = {
             "price_array": self.price_array,
@@ -100,7 +101,7 @@ class DRLEnsembleAgent:
             args.agent = model
             args.env = environment
             args_list.append(args)
-        #args.agent.if_use_cri_target = True  ##Not needed for test
+        # args.agent.if_use_cri_target = True  ##Not needed for test
 
         # load agent
         agent_list = []
@@ -137,16 +138,20 @@ class DRLEnsembleAgent:
                     action = (
                         a_tensor.detach().cpu().numpy()[0]
                     )  # not need detach(), because with torch.no_grad() outside
-                    action_list.append(action)
-                max_action = max(action_list, key=action_list.count)
+                    action_list.append(np.array(action))
+                print(type(action_list))
+                print(len(action_list[0]))
+                print(action_list[0])
+                action_list = np.array(action_list)
+                action = np.mean(action_list, axis=0)
 
-                state, reward, done, _ = environment.step(max_action)
+                state, reward, done, _ = environment.step(action)
 
                 total_asset = (
-                    environment.cash
-                    + (
-                        environment.price_array[environment.time] * environment.stocks
-                    ).sum()
+                        environment.cash
+                        + (
+                                environment.price_array[environment.time] * environment.stocks
+                        ).sum()
                 )
                 episode_total_assets.append(total_asset)
                 episode_return = total_asset / environment.initial_total_asset
