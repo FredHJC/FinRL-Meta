@@ -139,9 +139,7 @@ class DRLEnsembleAgent:
                         a_tensor.detach().cpu().numpy()[0]
                     )  # not need detach(), because with torch.no_grad() outside
                     action_list.append(np.array(action))
-                print(type(action_list))
-                print(len(action_list[0]))
-                print(action_list[0])
+
                 action_list = np.array(action_list)
                 action = np.mean(action_list, axis=0)
 
