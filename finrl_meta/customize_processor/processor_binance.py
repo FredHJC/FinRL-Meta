@@ -9,8 +9,8 @@ from finrl_meta.data_processors.basic_processor import BasicProcessor
 
 
 class BinanceProcessor(BasicProcessor):
-    def __init__(self, data_source: str, **kwargs):
-        BasicProcessor.__init__(self, data_source, **kwargs)
+    def __init__(self, data_source: str):
+        BasicProcessor.__init__(self, data_source)
         self.url = "https://api.binance.com/api/v3/klines"
     
     #main functions
@@ -54,18 +54,6 @@ class BinanceProcessor(BasicProcessor):
             final_df = final_df.append(tic_df)
         
         return final_df
-    
-
-    def add_turbulence(self, df):
-        print('Turbulence not supported yet. Return original DataFrame.')
-
-        return df
-    
-
-    def add_vix(self, df):
-        print('VIX is not applicable for cryptocurrencies. Return original DataFrame')
-        
-        return df
     
 
     def df_to_array(self, df, tech_indicator_list, if_vix):
