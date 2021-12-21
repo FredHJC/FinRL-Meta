@@ -983,8 +983,8 @@ class AgentDiscretePPO(AgentPPO):
 class AgentA2C(AgentPPO):  # A2C.2015, PPO.2016
     def __init__(self):
         AgentPPO.__init__(self)
-        print('| AgentA2C: A2C or A3C is worse than PPO. We provide AgentA2C code just for teaching.'
-              '| Without TrustRegion, A2C needs special hyper-parameters, such as smaller repeat_times.')
+        # print('| AgentA2C: A2C or A3C is worse than PPO. We provide AgentA2C code just for teaching.'
+        #       '| Without TrustRegion, A2C needs special hyper-parameters, such as smaller repeat_times.')
 
     def update_net(self, buffer, batch_size, repeat_times, soft_update_tau):
         with torch.no_grad():
